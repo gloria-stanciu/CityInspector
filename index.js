@@ -23,5 +23,5 @@ client.connect();
 // });
 
 app.get('/', function (req, res) {
-    res.send(process.env.DATABASE_URL)
+    res.send("Hello world")
   })
