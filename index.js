@@ -1,27 +1,43 @@
 require('dotenv').config()
+
 const express= require('express');
+const bodyParser = require('body-parser');
+const Knex = require('knex');
+const knexConfig = require('./knexfile')
+const {Model} = require('objection')
+const morgan = require('morgan')
+const helmet = require('helmet')
+const lumie = require('lumie')
+const path = require('path' )
+
 const app = express();
-app.listen(process.env.PORT || 3000, process.env.HOST || 'localhost');
+const knex = Knex(knexConfig);
 
-const { Client } = require('pg');
+Model.knex(knex)
 
-const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
+app.use(bodyParser.urlencoded({extended:false}))
+app.use(bodyParser.json())
+app.use(morgan('combined'))
+app.use(helmet())
+
+lumie.load(app, {
+  preURL: 'api',
+  verbose: true,
+  ignore: ['*.spec', '*.action', '*.validate'],
+  controllers_path: path.join(__dirname, 'controllers'),
+})
+
+async function main(){
+  console.info('Loading...')
+  console.info('Checking database connection!\n')
+  try{
+    await knex.raw('SELECT 1+1 AS RESULT')
+    const server = await app.listen(process.env.PORT)
+    console.log(`Server started: http://localhost:${server.address().port}/`)
+  }catch(err){
+    console.log(err);
+    process.exit(1);
   }
-});
+}
 
-client.connect();
-
-// client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
-//   if (err) throw err;
-//   for (let row of res.rows) {
-//     console.log(JSON.stringify(row));
-//   }
-//   client.end();
-// });
-
-app.get('/', function (req, res) {
-    res.send("Hello world")
-  })
+main()
