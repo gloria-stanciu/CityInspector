@@ -25,6 +25,7 @@
     "fs": "0.0.1-security",
     "hash": "^0.2.1",
     "helmet": "^4.2.0",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.12",
     "koa": "^2.13.0",
     "koa-router": "^10.0.0",

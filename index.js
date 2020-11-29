@@ -13,6 +13,8 @@ const path = require('path' )
 const app = express();
 const knex = Knex(knexConfig);
 
+const permissions = require('./permissions');
+
 Model.knex(knex)
 
 app.use(bodyParser.urlencoded({extended:false}))
@@ -24,6 +26,7 @@ lumie.load(app, {
   preURL: 'api',
   verbose: true,
   ignore: ['*.spec', '*.action', '*.validate'],
+  permissions,
   controllers_path: path.join(__dirname, 'controllers'),
 })
 
