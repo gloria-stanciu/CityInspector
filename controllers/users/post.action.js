@@ -55,7 +55,7 @@ async function login(req, res) {
         process.env.JWT_SECRET,
         {
           expiresIn: '7d',
-        }
+        },
       )
       return res.status(200).send(token)
     } else return res.status(401).send('Phone number or password is invalid.')

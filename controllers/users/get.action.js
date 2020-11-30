@@ -1,25 +1,21 @@
-const { Users } = require('@models')
-// const jwt = require('jsonwebtoken')
+const Users= require('../../models/users')
+const jwt = require('jsonwebtoken')
 
 async function getUser(req, res) {
-    // const token = req.header('x-access-token')
-    // const decoded = jwt.decode(token)
-
     try {
-        const user = await Users.findByPk(decoded.id)
+        const user = await Users.query().where('id', req.params.id)
 
-        if (!user) return res.status(401).send('Token not valid.')
-
-        return res.status(200).send({
-            username: user.username,
-            full_name: user.full_name,
-            email: user.email,
-        })
+        return res.status(200).send(user)
     } catch (err) {
         return res.status(500).send(err)
     }
 }
 
+async function getAll(req, res){
+    const users = await Users.query()
+    return res.status(200).send(users);
+  }
+
 module.exports = {
-    getUser,
+    getUser, getAll
 }
