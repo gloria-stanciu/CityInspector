@@ -57,7 +57,7 @@ async function login(req, res) {
           expiresIn: '7d',
         },
       )
-      return res.status(200).send(token)
+      return res.status(200).send("Log in successfully")
     } else return res.status(401).send('Phone number or password is invalid.')
   }catch (err) {
       console.log(err)
