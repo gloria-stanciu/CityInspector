@@ -1,7 +1,7 @@
 'use strict'
 
-const { signUp, login } = require('./post.action')
-const { getUser, getAll } = require('./get.action')
+const { create } = require('./post.action')
+const { getAll, getProblemsFromUser } = require('./get.action')
 const {update} = require('./update.action')
 const {remove} = require('./delete.action')
 
@@ -9,14 +9,20 @@ module.exports = {
     '/':{
         get: {
             action: getAll,
-            level: 'admin'
-        }
-    },
-    '/:id':{
-        get: {
-            action: getUser,
             level: 'user'
         },
+    },
+    '/:userId':{
+        get: {
+            action: getProblemsFromUser,
+            level: 'user'
+        },
+        post: {
+            action: create,
+            level: 'user'
+        },
+    },
+    '/:id':{
         patch: {
             action: update,
             level: 'user'
@@ -24,18 +30,6 @@ module.exports = {
         delete: {
             action: remove,
             level: 'admin'
-        },
-    },
-    '/register': {
-        post: {
-            action: signUp,
-            level: 'public',
-        },
-    },
-    '/login': {
-        post: {
-            action: login,
-            level: 'public',
         },
     },
 }

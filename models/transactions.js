@@ -4,7 +4,7 @@ const {Model} = require('objection')
 
 class Transactions extends Model {
     static get tableName(){
-        return 'problems'
+        return 'transactions'
     }
 
     static get relationMappings() {

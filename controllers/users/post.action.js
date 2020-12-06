@@ -33,7 +33,7 @@ async function signUp(req, res){
         })
         return res.status(200).send('User created successfully!')
     }catch(err){
-        res.send(err)
+        res.status(500).send(err)
     }
 }
 

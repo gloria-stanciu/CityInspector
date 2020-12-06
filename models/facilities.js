@@ -15,7 +15,7 @@ class Facilities extends Model{
                 relation: Model.HasManyRelation,
                 modelClass: transactions,
                 join: {
-                    from: 'facilities.id',
+                    from: 'facility.id',
                     to: 'transactions.usedFacility'
                 },
             },
