@@ -2,7 +2,6 @@
 
 const { expect } = require('chai');
 const supertest = require('supertest')('https://city--inspector.herokuapp.com/api');
-const Users = require('./models/users')
 
 describe('Create user', function(){
     it('Should create a user without admin role', async function(){
@@ -48,34 +47,14 @@ describe('Create user', function(){
             .post('/users/register')
             .send(data)
             .expect(400)
-            .then(async (response) => {
+            .then(response => {
                 expect(response.text).to.equal('Phone number already in use')
             })
     })
 })
 
 describe("Log in and get users", async function(){
-    it('Cannot log in because of bad token', async function(){
-        const data = {
-            "phoneNumber": "5566778899",
-            "password": "admin"
-        }
-        await supertest
-            .post('/users/login')
-            .send(data)
-            .expect(200)
-            .then(async response => {
-                await supertest
-                .get('/users')
-                .set({'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA3MjQ1ODEyNzciLCJpZCI6NSwiaWF0IjoxNjA2ODEyMzA3LCJleHAiOjE2MDc0MTcxMDd9.sUhQC0zS-eoRLBfzULq2YZQoh4ZbI1o_bKr-1FhJ9H8"})
-                .expect(401)
-                .then()
-                .catch(err => {
-                    expect(err.message).to.be.eq('bad token')
-                })
-            })
-    })
-    it("Logs in a user without admin role and should not be able to get users", async function(){
+    it("Logs in a user without admin role", async function(){
         const data = {
             "phoneNumber": "0011223344",
             "password": "test"
@@ -84,18 +63,18 @@ describe("Log in and get users", async function(){
             .post('/users/login')
             .send(data)
             .expect(200)
-            .then(async response => {
-                await supertest
-                .get('/users')
-                .set({'x-access-token': response.text})
-                .expect(401)
-                .then()
-                .catch(err => {
-                    expect(err.message).to.eq('ksabjczxnm')
-                })
+            .then()
+    })
+    it('Should not get all users with token of user without admin role', async function(){
+        await supertest
+            .get('/users')
+            .set('Authorization', 'Bearer yyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA3MjQ1ODEyNzciLCJpZCI6NSwiaWF0IjoxNjA2NzM1OTk5LCJleHAiOjE2MDczNDA3OTl9.v0eUFbjKibuz8R_FAQ6aA6FkgCy7zAL8jEfLIPANGtU')
+            .expect(401)
+            .then(response =>{
+                expect(response.body.message).to.equal('invalid token')
             })
     })
-    it("Logs in a user with admin role and should be able to get users", async function(){
+    it("Logs in a user with admin role", async function(){
         const data = {
             "phoneNumber": "5566778899",
             "password": "admin"
@@ -104,15 +83,7 @@ describe("Log in and get users", async function(){
             .post('/users/login')
             .send(data)
             .expect(200)
-            .then(async response => {
-                await supertest
-                .get('/users')
-                .set({'x-access-token': response.text})
-                .expect(200)
-                .then(response => {
-                    expect(response.body).to.be.an('array')
-                })
-            })
+            .then()
     })
 })
 
