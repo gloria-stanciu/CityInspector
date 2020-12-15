@@ -54,48 +54,98 @@ describe('Create user', function(){
 })
 
 describe("Log in and get users", async function(){
-    it("Logs in a user without admin role", async function(){
+    it("Logs in a user with admin role", async function(){
         const data = {
-            "phoneNumber": "0011223344",
-            "password": "test"
+            "phoneNumber": "0724581277",
+            "password": "glo"
         }
         await supertest
             .post('/users/login')
+            .set({'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA3MjQ1ODEyNzciLCJpZCI6NSwiaWF0IjoxNjA3MzQ2MDk4LCJleHAiOjE2MDc5NTA4OTh9.BL903qxlebRXHlX9RYoCylJLarVxLb6k4IqlVyXl83U"})
             .send(data)
             .expect(200)
             .then()
     })
-    it('Should not get all users with token of user without admin role', async function(){
+    it('Should get all users ', async function(){
         await supertest
             .get('/users')
-            .set('Authorization', 'Bearer yyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA3MjQ1ODEyNzciLCJpZCI6NSwiaWF0IjoxNjA2NzM1OTk5LCJleHAiOjE2MDczNDA3OTl9.v0eUFbjKibuz8R_FAQ6aA6FkgCy7zAL8jEfLIPANGtU')
-            .expect(401)
-            .then(response =>{
-                expect(response.body.message).to.equal('invalid token')
-            })
+            .set({'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA3MjQ1ODEyNzciLCJpZCI6NSwiaWF0IjoxNjA3MzQ2MDk4LCJleHAiOjE2MDc5NTA4OTh9.BL903qxlebRXHlX9RYoCylJLarVxLb6k4IqlVyXl83U"})
+            .expect(200)
+            .then()
     })
-    it("Logs in a user with admin role", async function(){
+    it("Logs in a user without admin role", async function(){
         const data = {
-            "phoneNumber": "5566778899",
-            "password": "admin"
+            "phoneNumber": "0742426326",
+            "password": "gloria"
         }
         await supertest
             .post('/users/login')
+            .set({'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA3NDI0MjYzMjYiLCJpZCI6MSwiaWF0IjoxNjA3MzQ2Mjk1LCJleHAiOjE2MDc5NTEwOTV9.vHrv5zgD055Qp-D9X6odk0aKPQ2Lkxtrl7khGR4_yKY"})
             .send(data)
+            .expect(200)
+            .then()
+    })
+    it('Should not get all users because user does not have admin role', async function(){
+        await supertest
+            .get('/users')
+            .set({'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA3NDI0MjYzMjYiLCJpZCI6MSwiaWF0IjoxNjA3MzQ2Mjk1LCJleHAiOjE2MDc5NTEwOTV9.vHrv5zgD055Qp-D9X6odk0aKPQ2Lkxtrl7khGR4_yKY"})
+            .expect(401)
+            .then()
+    })
+    it('Should get an user', async function(){
+        await supertest
+            .get('/users/4')
+            .set({'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA3NDI0MjYzMjYiLCJpZCI6MSwiaWF0IjoxNjA3MzQ2Mjk1LCJleHAiOjE2MDc5NTEwOTV9.vHrv5zgD055Qp-D9X6odk0aKPQ2Lkxtrl7khGR4_yKY"})
             .expect(200)
             .then()
     })
 })
 
-// describe("Get users or one user", async function(){
-//     it("", async function(){
-//         await supertest
-//         .get('/users')
-//         .set({'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA3MjQ1ODEyNzciLCJpZCI6NSwiaWF0IjoxNjA2ODEyMzA3LCJleHAiOjE2MDc0MTcxMDd9.sUhQC0zS-eoRLBfzULq2YZQoh4ZbI1o_bKr-1FhJ9H8"})
-//         .expect(401)
-//         .then()
-//         .catch(err => {
-//             expect(err.message).to.eq('invalid signature')
-//         })
-//     })
-// })
+describe("Update user", async function(){
+    it("Shoul update user", async function(){
+        const data = {
+            "phoneNumber": "0777888999",
+        }
+        await supertest
+        .patch('/users/91')
+        .set({'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA3MjQ1ODEyNzciLCJpZCI6NSwiaWF0IjoxNjA3MzQ2MDk4LCJleHAiOjE2MDc5NTA4OTh9.BL903qxlebRXHlX9RYoCylJLarVxLb6k4IqlVyXl83U"})
+        .send(data)
+        .expect(200)
+        .then()
+    })
+    it("Should not update user", async function(){
+        const data = {
+            "phoneNumber": "0777888999",
+        }
+        await supertest
+        .patch('/users/11o')
+        .set({'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA3NDI0MjYzMjYiLCJpZCI6MSwiaWF0IjoxNjA3MzQ2Mjk1LCJleHAiOjE2MDc5NTEwOTV9.vHrv5zgD055Qp-D9X6odk0aKPQ2Lkxtrl7khGR4_yKY"})
+        .send(data)
+        .expect(200)
+        .then()
+    })
+})
+
+describe("Delete user", async function(){
+    it("Delete user with admin role", async function(){
+        await supertest
+        .delete('/users/110')
+        .set({'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA3MjQ1ODEyNzciLCJpZCI6NSwiaWF0IjoxNjA3MzQ2MDk4LCJleHAiOjE2MDc5NTA4OTh9.BL903qxlebRXHlX9RYoCylJLarVxLb6k4IqlVyXl83U"})
+        .expect(200)
+        .then()
+    })
+    it("Delete user without admin role", async function(){
+        await supertest
+        .delete('/users/111')
+        .set({'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA3MjQ1ODEyNzciLCJpZCI6NSwiaWF0IjoxNjA3MzQ2MDk4LCJleHAiOjE2MDc5NTA4OTh9.BL903qxlebRXHlX9RYoCylJLarVxLb6k4IqlVyXl83U"})
+        .expect(200)
+        .then()
+    })
+    it("Should not delete user because token is not of user with admin role", async function(){
+        await supertest
+        .delete('/users/1')
+        .set({'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjA3NDI0MjYzMjYiLCJpZCI6MSwiaWF0IjoxNjA3MzQ2Mjk1LCJleHAiOjE2MDc5NTEwOTV9.vHrv5zgD055Qp-D9X6odk0aKPQ2Lkxtrl7khGR4_yKY"})
+        .expect(401)
+        .then()
+    })
+})

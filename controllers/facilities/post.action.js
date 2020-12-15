@@ -1,4 +1,4 @@
-'use strict'
+    'use strict'
 
 const Facilities = require('../../models/facilities')
 

@@ -4,6 +4,7 @@ const { signUp, login } = require('./post.action')
 const { getUser, getAll } = require('./get.action')
 const {update} = require('./update.action')
 const {remove} = require('./delete.action')
+const {userValidate} = require('../../services/validate/user.validate')
 
 module.exports = {
     '/':{
@@ -29,6 +30,7 @@ module.exports = {
     '/register': {
         post: {
             action: signUp,
+            middlewares: [userValidate],
             level: 'public',
         },
     },

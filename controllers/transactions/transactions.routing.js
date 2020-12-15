@@ -2,6 +2,8 @@
 
 const { create } = require('./post.action')
 const { getAll, getOne, getTransactionsFromUser } = require('./get.action')
+const { transactionValidate } = require('../../services/validate/transaction.validate')
+
 
 module.exports = {
     '/':{
@@ -23,6 +25,7 @@ module.exports = {
         },
         post: {
             action: create,
+            middlewares: [transactionValidate],
             level: 'user'
         },
     },

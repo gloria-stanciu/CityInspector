@@ -4,6 +4,7 @@ const { create } = require('./post.action')
 const { getAll, getOne } = require('./get.action')
 const {update} = require('./update.action')
 const {remove} = require('./delete.action')
+const { facilityValidate } = require('../../services/validate/facility.validate')
 
 module.exports = {
     '/':{
@@ -13,6 +14,7 @@ module.exports = {
         },
         post: {
             action: create,
+            middlewares: [facilityValidate],
             level: 'admin'
         },
     },

@@ -4,6 +4,7 @@ const { create } = require('./post.action')
 const { getAll, getOne } = require('./get.action')
 const {update} = require('./update.action')
 const {remove} = require('./delete.action')
+const {problemTypeValidate} = require('../../services/validate/problemType.validate')
 
 module.exports = {
     '/':{
@@ -13,6 +14,7 @@ module.exports = {
         },
         post: {
             action: create,
+            middlewares: [problemTypeValidate],
             level: 'admin'
         }
     },
