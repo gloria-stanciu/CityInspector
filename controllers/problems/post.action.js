@@ -1,10 +1,8 @@
 'use strict'
 
-const {S3Client, PutObjectCommand, CreateBucketCommand} = require("@aws-sdk/client-s3");
 const AWS = require('aws-sdk');
-
-const Problems = require('../../models/problems')
-
+const sqsAccountID = process.env.ACCOUNT_ID;
+const sqsQueueName = process.env.QUEUE_NAME;
 
 async function create(req, res){
     try{
@@ -16,9 +14,11 @@ async function create(req, res){
             long: req.body.long
         }
 
-        // Set the region we will be using
         AWS.config.update({region: 'us-east-2'});
         const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
+        
+        console.log(sqsAccountID);
+        console.log(sqsQueueName);
         
         const params = {
             MessageBody: JSON.stringify(newProblem),
@@ -34,7 +34,6 @@ async function create(req, res){
                 return res.status(200).send('Problem added successfully!')
             }
         });
-        //await Problems.query().insertGraph(newProblem)
     }catch(err){
         console.log(err)
         res.status(500).send(err)
